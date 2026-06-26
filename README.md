@@ -1,56 +1,94 @@
 # Walk & Chat
 
-A tiny 2D "walk around and chat" room. Pick a name and an avatar, move with the
-keyboard, and talk to people near you (proximity chat with speech bubbles).
+A tiny 2D game where people on the same network can walk around and chat.
+Pick a name and an avatar, move with the keyboard, and speak with players who
+are nearby.
 
-- **Client:** plain HTML5 Canvas + vanilla JS (no build step).
-- **Server:** Node.js + WebSockets (`ws`). The same process serves the page,
-  the avatar images, and the realtime connection.
-- **Only dependency:** `ws`.
-- **Suggested version:** `0.1.0` for the initial release, with `0.2.0` for
-  new features and `0.1.x` for bug fixes.
+## Quick start for anyone
+
+1. Download and install Node.js:
+   - Go to https://nodejs.org
+   - Download the **LTS** version for Windows, macOS, or Linux.
+   - Run the installer and accept the default options.
+2. Open the folder for this project:
+   - On Windows: open File Explorer, go to the project folder, then `Shift` +
+     right-click an empty area and choose **Open PowerShell window here** or
+     **Open in Terminal**.
+3. Install the project dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Start the game server:
+
+   ```bash
+   npm start
+   ```
+
+5. Open your web browser and go to:
+
+   ```text
+   http://localhost:3000
+   ```
+
+6. To play with others on the same Wi‑Fi/LAN, share the **Network** URL printed
+   in the terminal.
+
+## Does Node.js need special network permission?
+
+- The project requires Node.js to be installed separately; it does not ship
+  with Node built in.
+- When the server starts, Windows may ask to allow `node.exe` on your network.
+- If that happens, choose **Allow access** and allow it for **Private networks**.
+- Node.js does not automatically open on private networks without this permission.
+- If you miss the prompt, you can allow `node.exe` in Windows Defender Firewall
+  later.
+
+## What the project does
+
+- **Client:** browser page with HTML, CSS, and JavaScript.
+- **Server:** Node.js app in `server/server.js`.
+- **Network:** players on the same local network can connect and walk/chat.
 
 ## Run it locally
 
-```
+In the project folder:
+
+```bash
 npm install
 npm start
 ```
 
-Then open <http://localhost:3000> in your browser. Open a second tab (or another
-browser) to see two players move and chat at once.
+Then open <http://localhost:3000> in your browser. Open a second tab or another
+browser to see two players at once.
 
 ## Play with others on your network (LAN)
 
-1. Start the server (`npm start`). It prints a `Network:` URL, e.g.
+1. Start the server (`npm start`). It prints a `Network:` URL, for example:
    `http://192.168.1.23:3000`.
 2. Make sure everyone is on the **same Wi‑Fi/LAN**.
-3. Each player opens that `http://<your-ip>:3000` URL.
-4. **Windows firewall:** the first time you run it, Windows may pop up "Allow
-   Node.js to communicate on these networks" — allow **Private networks**. If you
-   missed it, allow `node` in Windows Defender Firewall, or temporarily test with
-   the firewall prompt enabled.
+3. Each player opens the printed `http://<your-ip>:3000` URL.
+4. If Windows prompts for firewall permission, allow **Private networks**.
 
-> Find your IP manually with `ipconfig` (look for the IPv4 address of your active
-> adapter) if the printed one isn't reachable.
+> If the printed IP is unreachable, use `ipconfig` on Windows to find your
+> IPv4 address for the active network adapter.
 
-## Choosing / adding avatars
+## Selecting avatars
 
-Avatars are just image files in `public/avatars/`. Supported types: `.png`,
-`.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`.
+Avatars are image files in `public/avatars/`.
 
+- Supported file types: `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`.
 - Drop your own images into `public/avatars/`.
-- Refresh the page — they show up in the avatar picker automatically (the server
-  reads the folder live; no restart needed).
-- Square images look best (they're shown in a circle).
-
-Six starter characters are included so it works out of the box.
+- Refresh the browser page and the new avatars appear automatically.
+- Square images look best because the game displays them in a circle.
 
 ## Controls
 
-- **Move:** `W A S D` or the arrow keys.
-- **Chat:** press **Enter** to focus the chat box, type, press **Enter** to send
-  (**Esc** to cancel). Only players within the hearing radius see your message.
+- **Move:** `W A S D` or arrow keys.
+- **Chat:** press **Enter** to type, then **Enter** again to send.
+- Press **Esc** to cancel typing.
+- Only players within the hearing radius see your message.
 
 ## Configuration
 
@@ -60,37 +98,14 @@ Edit the constants at the top of `server/server.js`:
 - `HEAR_RADIUS` — how close you must be to hear chat (default 300).
 - `PLAYER_SPEED` — walk speed in px/s (default 260).
 - `TICK_RATE` — position updates per second (default 20).
-- `PORT` — listen port (or set the `PORT` env var).
+- `PORT` — listen port (or set the `PORT` environment variable).
 
 ## How it works
 
-- The browser connects a WebSocket back to whatever host served the page, so LAN
-  players don't configure anything.
-- The client predicts your own movement locally and smooths everyone else between
-  the server's 20 Hz snapshots.
-- The **server** is authoritative: it clamps positions to the room, sanitizes and
-  rate-limits chat, and only forwards a message to players within `HEAR_RADIUS`.
-
-## Logic flow
-
-1. Client loads `index.html` and requests avatar options from the server.
-2. User enters a name, selects an avatar, and joins the room.
-3. The client opens a WebSocket connection to the server.
-4. User input is translated into movement commands and sent to the server.
-5. The server updates the authoritative player state on every tick.
-6. The server broadcasts periodic position snapshots and nearby chat messages.
-7. The client renders the world, shows avatars and speech bubbles, and
-   interpolates remote players between updates.
-
-
-Future development ideas:
-
-- Add persistent player accounts and session storage.
-- Support multiple rooms or private lobbies.
-- Add obstacles, collision detection, and better map layout.
-- Improve UI for mobile and add touch controls.
-- Support internet hosting and NAT traversal instead of LAN-only.
-- Add audio chat, reactions, or richer chat bubbles.
+- The browser loads `index.html` from the server.
+- The client selects a name and avatar, then opens a WebSocket connection.
+- The server manages player positions and forwards chat to nearby players.
+- The browser renders the world and smoothly updates other players.
 
 ## Project layout
 
@@ -106,8 +121,8 @@ walk-chat-room/
 └─ README.md
 ```
 
-## Not included (yet)
+## Not included yet
 
 Accounts, persistence, multiple rooms, obstacles/collisions, mobile touch
-controls, and internet (non-LAN) hosting. The code is intentionally small so
-these are easy to add later.
+controls, and internet (non-LAN) hosting are not included yet. The code is kept
+small so these can be added later.
