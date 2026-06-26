@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Walk &amp; Chat</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="game">
+      <canvas id="canvas"></canvas>
+      <div id="hud">
+        <div id="status" class="status">connecting…</div>
+        <div id="hint">Move: <b>WASD</b> / arrows · <b>Enter</b> to chat</div>
+      </div>
+      <div id="chat">
+        <div id="chatlog" aria-live="polite"></div>
+        <input
+          id="chatinput"
+          type="text"
+          maxlength="200"
+          placeholder="Press Enter to chat…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    <div id="join" class="overlay">
+      <div class="panel">
+        <h1>Walk &amp; Chat</h1>
+        <p class="sub">Pick a name and an avatar, then enter the room.</p>
+
+        <label class="lbl" for="name">Display name</label>
+        <input id="name" class="text" type="text" maxlength="20" placeholder="Your name" autocomplete="off" />
+
+        <div class="lbl">Choose your avatar</div>
+        <div id="avatars" class="avatars"></div>
+
+        <button id="enter" class="btn" disabled>Enter room</button>
+        <div id="joinmsg" class="joinmsg"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

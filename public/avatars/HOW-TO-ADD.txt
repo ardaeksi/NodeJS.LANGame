@@ -1,0 +1,10 @@
+Drop your avatar images in THIS folder (public/avatars/).
+
+Supported file types: .png  .jpg  .jpeg  .gif  .webp  .svg
+
+Tips:
+- Square images look best (they are shown inside a circle).
+- After adding a file, just refresh the join page — it appears in the avatar
+  picker automatically (the server reads this folder live, no restart needed).
+- Files whose names start with a dot are ignored. This .txt file is ignored too
+  (only image files show up in the picker).
