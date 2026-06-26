@@ -1,0 +1,16 @@
+{
+  "name": "walk-chat-room",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A tiny 2D walk-around chat room with proximity chat. Browser client + Node WebSocket server.",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
